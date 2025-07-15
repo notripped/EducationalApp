@@ -1,97 +1,285 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Educational App (AI-Powered Video Learning)
 
-# Getting Started
+This project is an educational mobile application designed to enhance learning through videos by providing AI-powered insights and mapping video content to NCERT concepts. It consists of a React Native frontend and a Node.js backend that acts as an API proxy for YouTube and a RAG (Retrieval Augmented Generation) system powered by the Google Gemini API.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## 🌟 Features
 
-## Step 1: Start Metro
+* **Video Browse:** Explore popular educational videos and browse content from specific channels (e.g., Veritasium, Kurzgesagt, Physics Wallah).
+* **Video Playback:** Seamless playback of selected YouTube videos within the app.
+* **AI-Powered Concept Mapping:** Get relevant NCERT concepts and explanations linked to video content (currently based on hardcoded transcript segments for demonstration).
+* **User-Friendly Interface:** Intuitive navigation for an engaging learning experience.
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## 🚀 Technologies Used
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+### Frontend (Mobile Application)
 
-```sh
-# Using npm
+* **React Native:** For cross-platform mobile development (Android & iOS).
+* **React Navigation:** For managing app navigation.
+* **`react-native-video`:** For video playback.
+* **`@react-navigation/native`**, **`@react-navigation/stack`**, **`@react-navigation/bottom-tabs`**: For robust navigation.
+
+### Backend (API & RAG System)
+
+* **Node.js:** JavaScript runtime environment.
+* **Express.js:** Web framework for building the API.
+* **Google Gemini API:** Powers the RAG system for mapping content to NCERT concepts.
+* **YouTube Data API v3:** Used to fetch video information (popular videos, channel videos, video details).
+* **`node-fetch`:** For making HTTP requests to external APIs.
+* **`dotenv`:** For managing environment variables (API keys).
+
+## ⚙️ Architecture / How it Works
+
+The application follows a client-server architecture:
+
+1.  **Frontend (React Native):**
+    * Displays video lists and playback UI.
+    * Sends requests for video data (popular, channel-specific) to the **Backend Proxy**.
+    * Sends a "transcript segment" (currently hardcoded for demonstration) along with the video ID to the **Backend RAG System** when a user interacts with a video (e.g., to get concepts).
+
+2.  **Backend (Node.js/Express.js):**
+    * **YouTube API Proxy:** Receives requests from the frontend for video data, securely makes calls to the official YouTube Data API (using a hidden API key), processes the responses, and sends relevant video data back to the frontend.
+    * **RAG System:** Receives transcript segments/queries from the frontend. It then uses the Google Gemini API to process these inputs and generate/retrieve relevant NCERT concepts and their explanations, which are then sent back to the frontend.
+    * **Environment Variables:** Securely stores sensitive API keys (Google Gemini API Key, YouTube Data API Key) using `.env` files.
+
+## 🛠️ Setup and Installation
+
+Follow these steps to get the app running on your local machine.
+
+### Prerequisites
+
+* Git
+* Node.js (LTS version recommended) & npm (or Yarn)
+* Android Studio (for Android Emulator) or Xcode (for iOS Simulator)
+* A Google Cloud Project with:
+    * **Google Gemini API** enabled.
+    * **YouTube Data API v3** enabled.
+    * API Keys generated for both services.
+
+### 1. Clone the Repository
+
+Open your terminal or command prompt and clone the monorepo:
+
+```bash
+git clone [https://github.com/notripped/EducationalApp.git](https://github.com/your-username/EducationalAppNew.git)
+
+# Educational App
+
+A React Native educational application that leverages Google Gemini AI and YouTube Data API to provide interactive learning experiences with video content and concept extraction.
+
+## Features
+
+- **Video Browsing**: Browse popular educational videos through a proxy backend
+- **Channel Exploration**: Explore content from specific educational channels
+- **Video Player**: Built-in video player for seamless learning experience
+- **Concept Extraction**: AI-powered NCERT concept extraction from video content
+- **Cross-Platform**: Supports both Android and iOS platforms
+
+## Tech Stack
+
+### Backend
+- **Node.js**: Server runtime
+- **Express.js**: Web framework
+- **Google Gemini AI**: For concept extraction and AI features
+- **YouTube Data API v3**: For fetching video content
+
+### Frontend
+- **React Native**: Cross-platform mobile development
+- **Metro Bundler**: React Native development server
+- **JavaScript/TypeScript**: Programming languages
+
+## Prerequisites
+
+- **Node.js** (v14 or higher)
+- **npm** or **yarn**
+- **React Native CLI**
+- **Android Studio** (for Android development)
+- **Xcode** (for iOS development, macOS only)
+- **Google Gemini API Key**
+- **YouTube Data API v3 Key**
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd EducationalAppNew
+```
+
+### 2. Backend Setup
+
+Navigate to the backend directory and install dependencies:
+
+```bash
+cd educational-backend
+npm install
+```
+
+#### Configure Environment Variables (`.env`)
+
+Create a file named `.env` in the `educational-backend` directory:
+
+```env
+GOOGLE_API_KEY=YOUR_GEMINI_API_KEY_HERE
+YOUTUBE_API_KEY=YOUR_YOUTUBE_DATA_API_KEY_HERE
+```
+
+**API Keys Setup:**
+- `YOUR_GEMINI_API_KEY_HERE`: Replace with your Google Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+- `YOUR_YOUTUBE_DATA_API_KEY_HERE`: Replace with your YouTube Data API v3 key from [Google Cloud Console](https://console.cloud.google.com/)
+
+#### Run the Backend
+
+Start the Node.js backend server:
+
+```bash
 npm start
-
-# OR using Yarn
-yarn start
 ```
 
-## Step 2: Build and run your app
+The server should start on port `3001` (e.g., `http://localhost:3001`). Keep this terminal window open.
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+### 3. Frontend Setup
 
-### Android
+Open a **new** terminal or command prompt window. Navigate to the frontend directory:
 
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```bash
+cd .. # Go back to the root EducationalAppNew folder first
+cd educational-frontend
+npm install
 ```
 
-### iOS
+#### Configure API Base URL (`api.js`)
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+Open `educational-frontend/api.js`. Ensure the `API_BASE_URL` is correctly set for your emulator/device:
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
+```javascript
+const API_BASE_URL = 'http://10.0.2.2:3001/api'; // For Android Emulator
+// const API_BASE_URL = 'http://localhost:3001/api'; // For iOS Simulator or Web
 ```
 
-Then, and every time you update your native dependencies, run:
+**Platform-specific URLs:**
+- **Android Emulator**: Use `http://10.0.2.2:3001/api`
+- **iOS Simulator**: Use `http://localhost:3001/api`
 
-```sh
-bundle exec pod install
+#### Run the Frontend
+
+Start the React Native development server (Metro Bundler):
+
+```bash
+npm start
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+Once the Metro Bundler is running, you can launch the app on your emulator or device:
+- **Android Emulator**: Press `a` in the Metro Bundler terminal
+- **iOS Simulator**: Press `i` in the Metro Bundler terminal
 
-```sh
-# Using npm
-npm run ios
+## Project Structure
 
-# OR using Yarn
-yarn ios
+```
+EducationalAppNew/
+├── educational-backend/
+│   ├── node_modules/
+│   ├── .env
+│   ├── package.json
+│   └── server.js
+├── educational-frontend/
+│   ├── node_modules/
+│   ├── api.js
+│   ├── package.json
+│   └── src/
+└── README.md
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## Usage
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+### 🎥 Browse Videos
+The home screen displays popular educational videos fetched via your backend proxy. Scroll horizontally to discover more content.
 
-## Step 3: Modify your app
+### 📚 Explore Channels
+Different sections showcase videos from specific educational channels, organized for easy navigation.
 
-Now that you have successfully run the app, let's make changes!
+### ▶️ Watch Videos
+Tap on any video thumbnail to open the integrated video player screen for an immersive learning experience.
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+### 🧠 Get Concepts
+On the video player screen, the app extracts and displays relevant NCERT concepts related to the video content using AI-powered analysis.
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+## Development
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+### Running on Different Platforms
 
-## Congratulations! :tada:
+#### Android
+1. Ensure Android Studio is installed and configured
+2. Start Android emulator or connect physical device
+3. Run `npm start` in the frontend directory
+4. Press `a` when prompted
 
-You've successfully run and modified your React Native App. :partying_face:
+#### iOS (macOS only)
+1. Ensure Xcode is installed
+2. Start iOS Simulator
+3. Run `npm start` in the frontend directory
+4. Press `i` when prompted
 
-### Now what?
+### Debugging
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+- **Metro Bundler**: Check the terminal running `npm start` for any JavaScript errors
+- **Backend Logs**: Monitor the backend terminal for API errors
+- **Device/Emulator**: Use React Native debugging tools and device logs
 
-# Troubleshooting
+## Environment Variables
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+### Backend (`.env`)
+```env
+GOOGLE_API_KEY=your_gemini_api_key
+YOUTUBE_API_KEY=your_youtube_api_key
+PORT=3001
+```
 
-# Learn More
+### Frontend (`api.js`)
+```javascript
+// Configure based on your development environment
+const API_BASE_URL = 'http://10.0.2.2:3001/api'; // Android
+// const API_BASE_URL = 'http://localhost:3001/api'; // iOS
+```
 
-To learn more about React Native, take a look at the following resources:
+## API Endpoints
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+The backend provides the following endpoints:
+- `GET /api/videos` - Fetch popular videos
+- `GET /api/channels` - Get channel information
+- `POST /api/concepts` - Extract concepts from video content
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Metro Bundler not starting**: Clear cache with `npx react-native start --reset-cache`
+2. **API connection failed**: Verify backend is running and API_BASE_URL is correct
+3. **Android emulator issues**: Ensure `http://10.0.2.2:3001/api` is used
+4. **iOS simulator issues**: Ensure `http://localhost:3001/api` is used
+
+### Error Logs
+- Check Metro Bundler terminal for JavaScript errors
+- Monitor backend terminal for API request errors
+- Use device developer tools for runtime debugging
+
+## Contributing
+
+Contributions are welcome! If you find a bug or have an idea for a new feature:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Google Gemini AI for concept extraction capabilities
+- YouTube Data API for video content access
+- React Native community for excellent documentation and support
+cd EducationalAppNew
